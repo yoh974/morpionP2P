@@ -35,9 +35,7 @@ namespace Morpion
                 nb_joueur = 1;
             }
 
-            nb_joueur = 1;
             nom_joueur = Interaction.InputBox("Entrez le nom du joueur", "Entrez le nom du joueur", "joueur_1");
-            nom_joueur = "joueur_1";
             joueur_1 = new Joueur(nom_joueur);
             joueur_2 = new Joueur("Ordinateur");
             InitializeComponent();
@@ -46,8 +44,6 @@ namespace Morpion
             joueur_1.tour = (rand.Next(0, 2) == 1);
             joueur_2.tour = !joueur_1.tour;
             label_joueur.Text = (joueur_1.tour) ? joueur_1.nom : joueur_2.nom;
-
-
             tab[0] = label1;
             tab[1] = label2;
             tab[2] = label3;
@@ -57,10 +53,10 @@ namespace Morpion
             tab[6] = label7;
             tab[7] = label8;
             tab[8] = label9;
-            //while (Partie_non_fini())
-            //{
-            //    Play();
-            //}
+            if (joueur_2.tour)
+            {
+                Play();
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -110,16 +106,52 @@ namespace Morpion
 
         private void remplir(ref Label label)
         {
+            string gagnant = "";
             string O_X = (joueur_1.tour) ? joueur_1.caractere : joueur_2.caractere;
             label.Text = (label.Text == "") ? O_X : label.Text;
             joueur_1.tour = !joueur_1.tour;
             joueur_2.tour = !joueur_2.tour;
-            Play();
+            if (Partie_non_fini())
+            {
+                Play();
+            }
+            else
+            {
+                gagnant = (isGameWin() == "O") ? "gagné" : "perdu";
+                DialogResult dialogResult = MessageBox.Show("Partie terminée vous avez " + gagnant, "Partie terminé",
+                    MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    //TODO: new game
+                    createNewGame();
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    //do something else
+                    Application.Exit();
+                }
+            }
+        }
+
+        private void createNewGame()
+        {
+            Random rand = new Random();
+            foreach (Label label in this.tab)
+            {
+                label.Text = "";
+            }
+            joueur_1.tour = (rand.Next(0, 2) == 1);
+            joueur_2.tour = !joueur_1.tour;
+            label_joueur.Text = (joueur_1.tour) ? joueur_1.nom : joueur_2.nom;
+            if (joueur_2.tour)
+            {
+                Play();
+            }
         }
 
         private bool Partie_non_fini()
         {
-            return !isGameOver();
+            return gameStateCheck() == "c";
         }
 
         private void Play()
@@ -146,20 +178,22 @@ namespace Morpion
         }
 
         //test si un des deux joueur a gagné retourne c pour continuer ou le caractère gagnant
-        string isGameWin()
+        private string isGameWin()
         {
             string O = "OOO";
             string X = "XXX";
-            if (label1.Text + label2.Text + label3.Text == O || label1.Text + label5.Text + label9.Text == O ||
-                label1.Text + label4.Text + label7.Text == O || label2.Text + label5.Text + label8.Text == O ||
-                label3.Text + label6.Text + label9.Text == O || label3.Text + label5.Text + label7.Text == O)
+            if (tab[0].Text + tab[1].Text + tab[2].Text == O || tab[0].Text + tab[4].Text + tab[8].Text == O ||
+                tab[0].Text + tab[3].Text + tab[6].Text == O || tab[1].Text + tab[4].Text + tab[7].Text == O ||
+                tab[2].Text + tab[5].Text + tab[8].Text == O || tab[2].Text + tab[4].Text + tab[6].Text == O ||
+                tab[6].Text + tab[7].Text + tab[8].Text == O )
             {
                 return "O";
             }
 
-            if (label1.Text + label2.Text + label3.Text == X || label1.Text + label5.Text + label9.Text == X ||
-                label1.Text + label4.Text + label7.Text == X || label2.Text + label5.Text + label8.Text == X ||
-                label3.Text + label6.Text + label9.Text == X || label3.Text + label5.Text + label7.Text == X)
+            if (tab[0].Text + tab[1].Text + tab[2].Text == X || tab[0].Text + tab[4].Text + tab[8].Text == X ||
+                tab[0].Text + tab[3].Text + tab[6].Text == X || tab[1].Text + tab[4].Text + tab[7].Text == X ||
+                tab[2].Text + tab[5].Text + tab[8].Text == X || tab[2].Text + tab[4].Text + tab[6].Text == X||
+                tab[6].Text + tab[7].Text + tab[8].Text == X )
             {
                 return "X";
             }
@@ -170,13 +204,15 @@ namespace Morpion
         //vérifie s'il y a des case disponible sinon c'est game over
         bool isGameOver()
         {
-            bool fin = false;
             for (int i = 0; i < tab.Length; i++)
             {
-                fin = (tab[i].Text == "");
+                if (tab[i].Text == "")
+                {
+                    return false;
+                }
             }
 
-            return !fin;
+            return true;
         }
 
         //vérification générale utilisant les deux précéentes fonction
@@ -253,8 +289,7 @@ namespace Morpion
                         tabLigne = tab[j].Text + tab[j + 3].Text + tab[j + 6].Text;
 
                         //test des différentes position des O et affectation du O à l'unique case vide
-                        if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                            tabLigne == " " + car_ord + car_ord)
+                        if (tabLigne == car_ord + car_ord )
                         {
                             if (tab[j].Text == "")
                             {
@@ -276,8 +311,7 @@ namespace Morpion
 
                     //diagonale à partir de la position 0
                     tabLigne = tab[0].Text + tab[4].Text + tab[8].Text;
-                    if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                        tabLigne == " " + car_ord + car_ord)
+                    if (tabLigne == car_ord + car_ord )
                     {
                         if (tab[0].Text == "")
                         {
@@ -299,8 +333,7 @@ namespace Morpion
                     //diagonale à partir de la position 2
                     tabLigne = tab[2].Text + tab[4].Text + tab[6].Text;
 
-                    if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                        tabLigne == " " + car_ord + car_ord)
+                    if (tabLigne == car_ord + car_ord )
                     {
                         if (tab[2].Text == "")
                         {
@@ -323,8 +356,7 @@ namespace Morpion
                 //test des lignes
                 tabLigne = tab[i].Text + tab[i + 1].Text + tab[i + 2].Text;
 
-                if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                    tabLigne == " " + car_ord + car_ord)
+                if (tabLigne == car_ord + car_ord )
                 {
                     if (tab[i].Text == "")
                     {
@@ -364,8 +396,7 @@ namespace Morpion
                         tabLigne = tab[j].Text + tab[j + 3].Text + tab[j + 6].Text;
 
                         //test des différentes position des O et affectation du O à l'unique case vide
-                        if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                            tabLigne == " " + car_ord + car_ord)
+                        if (tabLigne == car_ord + car_ord )
                         {
                             if (tab[j].Text == "")
                             {
@@ -387,8 +418,7 @@ namespace Morpion
 
                     //diagonale à partir de la position 0
                     tabLigne = tab[0].Text + tab[4].Text + tab[8].Text;
-                    if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                        tabLigne == " " + car_ord + car_ord)
+                    if (tabLigne == car_ord + car_ord )
                     {
                         if (tab[0].Text == "")
                         {
@@ -410,8 +440,7 @@ namespace Morpion
                     //diagonale à partir de la position 2
                     tabLigne = tab[2].Text + tab[4].Text + tab[6].Text;
 
-                    if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                        tabLigne == " " + car_ord + car_ord)
+                    if (tabLigne == car_ord + car_ord )
                     {
                         if (tab[2].Text == "")
                         {
@@ -434,8 +463,7 @@ namespace Morpion
                 //test des lignes
                 tabLigne = tab[i].Text + tab[i + 1].Text + tab[i + 2].Text;
 
-                if (tabLigne == car_ord + car_ord + " " || tabLigne == car_ord + " " + car_ord ||
-                    tabLigne == " " + car_ord + car_ord)
+                if (tabLigne == car_ord + car_ord )
                 {
                     if (tab[i].Text == "")
                     {
