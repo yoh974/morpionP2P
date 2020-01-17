@@ -8,12 +8,13 @@ namespace Morpion
 {
     class Joueur
     {
-        public bool tour;
-        public string nom = "Ordinateur";
-        public string caractere;
+        public bool Tour { get; set; }
+        public string Nom { get; } = "Ordinateur";
+        public string Caractere { get; set; }
+
         public Joueur(string nom_donnee ="")
         {
-            this.nom = (nom_donnee =="") ? this.nom : nom_donnee;
+            this.Nom = (nom_donnee =="") ? this.Nom : nom_donnee;
         }
     }
 }

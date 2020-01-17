@@ -2,15 +2,18 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\Lionel\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Lionel\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Morpion.1292225669.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Lionel\OneDrive\Documents\MasterEpsi\C#\MorpionP2P" t="IncludeFlat">
+    <e p="C:\Users\Lionel\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Morpion.2051566625.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Lionel\OneDrive\MasterEpsi\C#\MorpionP2P" t="IncludeFlat">
       <e p="Morpion" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Form1.cs" t="Include" />
         <e p="Form1.Designer.cs" t="Include" />
         <e p="Form1.resx" t="Include" />
+        <e p="Grille.cs" t="Include" />
+        <e p="IA.cs" t="Include" />
         <e p="Joueur.cs" t="Include" />
+        <e p="Morpion.cs" t="Include" />
         <e p="Morpion.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="Program.cs" t="Include" />

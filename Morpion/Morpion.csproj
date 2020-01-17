@@ -53,7 +53,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Grille.cs" />
+    <Compile Include="IA.cs" />
     <Compile Include="Joueur.cs" />
+    <Compile Include="Morpion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
