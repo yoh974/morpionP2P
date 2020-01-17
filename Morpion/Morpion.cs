@@ -18,25 +18,24 @@ namespace Morpion
 
         public Label nom_joueur_1 { get; set; }
 
-        public Morpion(Label nomJoueur1,Label nomJoueur2, Grille grille)
+        public Morpion(Label nomJoueur1, Label nomJoueur2, Grille grille)
         {
             nom_joueur_1 = nomJoueur1;
             nom_joueur_2 = nomJoueur2;
             _grille = grille;
-
         }
 
-        
-        public void init(string nom_joueur1,string nomJoueur2)
+
+        public void init(string nom_joueur1, string nomJoueur2)
         {
             string nom_joueur = nom_joueur1;
             Random rand = new Random();
             joueur_1 = new Joueur(nom_joueur);
             joueur_2 = new Joueur(nomJoueur2);
-            
+
             joueur_1.Caractere = SYMBOL_1;
             joueur_2.Caractere = SYMBOL_2;
-            _ia = new IA(_grille,SYMBOL_2);
+            _ia = new IA(_grille, SYMBOL_1, SYMBOL_2);
             joueur_1.Tour = (rand.Next(0, 2) == 1);
             joueur_2.Tour = !joueur_1.Tour;
             nom_joueur_1.Text = joueur_1.Nom;
@@ -48,22 +47,24 @@ namespace Morpion
                 Play();
             }
         }
+
         private void Play()
         {
             if (joueur_2.Tour && joueur_2.Nom == "Ordinateur")
             {
-               remplirGrille(_ia.Jouer_IA());
+                remplirGrille(_ia.Jouer_IA());
             }
             else
             {
                 //attente tour joueur 2
             }
         }
+
         public void remplirGrille(int indice)
         {
             string gagnant = "";
             string O_X = (joueur_1.Tour) ? joueur_1.Caractere : joueur_2.Caractere;
-            _grille.remplirCase(O_X,indice);
+            _grille.remplirCase(O_X, indice);
             joueur_1.Tour = !joueur_1.Tour;
             joueur_2.Tour = !joueur_2.Tour;
             nom_joueur_2.BorderStyle = (joueur_2.Tour) ? BorderStyle.FixedSingle : BorderStyle.None;
@@ -87,8 +88,25 @@ namespace Morpion
                         break;
                 }
 
-                gagnant = (gameStateCheck() == SYMBOL_1) ? "gagné" : "perdu";
-                DialogResult dialogResult = MessageBox.Show("Partie terminée : " + gagnant + " \n\nVoulez-vous rejouez?", "Partie terminé",
+                string stateCheck = gameStateCheck();
+                switch (stateCheck)
+                {
+                    case SYMBOL_1:
+                        gagnant = "gagné";
+                        break;
+                    case SYMBOL_2:
+                        gagnant = "perdu";
+                        break;
+                    case "d":
+                        gagnant = "match nul";
+                        break;
+                    default:
+                        gagnant = "statut de la partie indéterminé";
+                        break;
+                }
+                
+                DialogResult dialogResult = MessageBox.Show(
+                    "Partie terminée : " + gagnant + " \n\nVoulez-vous rejouez?", "Partie terminé",
                     MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
@@ -100,6 +118,7 @@ namespace Morpion
                 }
             }
         }
+
         public void createNewGame()
         {
             Random rand = new Random();
@@ -116,6 +135,7 @@ namespace Morpion
         {
             return gameStateCheck() == "c";
         }
+
         //test si un des deux joueur a gagné retourne c pour continuer ou le caractère gagnant
         private string isGameWin()
         {
@@ -123,10 +143,10 @@ namespace Morpion
                 return SYMBOL_1;
             if (_grille.checkGagnant(SYMBOL_2))
                 return SYMBOL_2;
-            
+
             return "c";
         }
-        
+
         //vérification générale utilisant les deux précéentes fonction
         string gameStateCheck()
         {
@@ -147,5 +167,4 @@ namespace Morpion
             }
         }
     }
-    
 }

@@ -7,11 +7,13 @@ namespace Morpion
     {
         private Grille _grille;
         private string _signe_ordinateur;
+        private string _signe_joueur;
 
-        public IA(Grille grille,string signe_ordinateur)
+        public IA(Grille grille,string signeJoueur,string signe_ordinateur)
         {
             _signe_ordinateur = signe_ordinateur;
             _grille = grille;
+            _signe_joueur = signeJoueur;
         }
 
         public int Jouer_IA()
@@ -178,7 +180,7 @@ namespace Morpion
         int iaPlayToDefend()
         {
             //test
-            string car_ord = _signe_ordinateur;
+            string car_ord = _signe_joueur;
             string tabLigne = "FFF";
             for (int i = 0; i < 9; i += 3)
             {
